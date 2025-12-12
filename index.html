@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pusat Keamanan & Pelaporan</title>
+    
+    <style>
+        /* CSS Variabel untuk Tema */
+        :root {
+            /* Light Mode Defaults */
+            --bg-color: #f0f2f5; 
+            --container-bg: #ffffff; 
+            --text-color: #1c1e21; 
+            --secondary-text-color: #606770; 
+            --border-color: #ccd0d5;
+            --input-bg: #ffffff;
+            --button-bg: #1877f2;
+            --button-hover-bg: #166fe5;
+            --option-bg: #f7f8fa;
+            --success-bg: #d4edda;
+            --success-text: #155724;
+            --success-border: #c3e6cb;
+            --panel-bg: #e4e6eb;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --facebook-blue: #1877f2;
+            --error-color: #fa383e;
+            --developer-bg: #f0f8ff; /* Warna terang untuk kotak developer */
+            --developer-border: #a0c3ff;
+        }
+
+        /* Dark Mode Override */
+        .dark-mode {
+            --bg-color: #18191a;
+            --container-bg: #242526;
+            --text-color: #e4e6eb;
+            --secondary-text-color: #b0b3b8;
+            --border-color: #3a3b3c;
+            --input-bg: #3a3b3c;
+            --button-bg: #1877f2;
+            --button-hover-bg: #166fe5;
+            --option-bg: #3a3b3c;
+            --success-bg: #283a2d;
+            --success-text: #a8d9b1;
+            --success-border: #3c5240;
+            --panel-bg: #2f3031;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --error-color: #ff5e64;
+            --developer-bg: #1e2430; 
+            --developer-border: #3c4a63;
+        }
+        
+        /* Base Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 16px; 
+        }
+        
+        /* LOGIN PAGE STYLES */
+        #loginPage {
+            display: flex; /* Halaman awal tampil sebagai login */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .login-logo {
+            font-size: 3.5em;
+            font-weight: bold;
+            color: var(--facebook-blue);
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+        }
+        
+        #loginError {
+            color: var(--error-color);
+            margin-bottom: 15px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .login-form-box {
+            background-color: var(--container-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            width: 100%;
+        }
+
+        .login-form-box input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-sizing: border-box;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 1em;
+        }
+        .login-form-box button {
+            width: 100%;
+            background-color: var(--facebook-blue);
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        /* REPORT PAGE STYLES */
+        #reportPage {
+            display: none; /* Sembunyikan halaman laporan secara default */
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 0;
+            min-height: 100vh;
+        }
+
+        .main-wrapper {
+            max-width: 550px;
+            width: 90%;
+            margin-bottom: 50px;
+        }
+
+        .container {
+            background-color: var(--container-bg);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px var(--shadow-color), 0 8px 16px var(--shadow-color); 
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        h2 {
+            color: var(--text-color);
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        /* Control Panel (Tengah) */
+        .control-panel {
+            background-color: var(--panel-bg);
+            color: var(--secondary-text-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center; /* Posisikan kontrol di tengah */
+            gap: 25px;
+            align-items: center;
+            box-shadow: 0 1px 3px var(--shadow-color);
+            transition: background-color 0.3s;
+        }
+        
+        /* Input dan TextArea Styling */
+        .form-group { margin-bottom: 20px; }
+        label.main-label { display: block; margin-bottom: 10px; color: var(--secondary-text-color); font-weight: bold; font-size: 1em; }
+
+        input[type="url"],
+        textarea {
+            width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; box-sizing: border-box;
+            font-size: 1em; background-color: var(--input-bg); color: var(--text-color); transition: border-color 0.3s;
+        }
+        input:focus, textarea:focus { border-color: var(--button-bg); box-shadow: 0 0 0 1px var(--button-bg); outline: none; }
+        
+        /* Report Options Styling */
+        .report-options { display: flex; flex-direction: column; gap: 8px; }
+        .report-option {
+            display: flex; align-items: center; padding: 12px; background-color: var(--option-bg);
+            border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; transition: background-color 0.2s;
+        }
+        .report-option input[type="radio"] { margin-right: 12px; transform: scale(1.1); accent-color: var(--button-bg); }
+
+        /* Button Styling */
+        button[type="submit"]:not(.login-form-box button) {
+            width: 100%; background-color: var(--button-bg); color: white; padding: 14px 20px; margin-top: 15px;
+            border: none; border-radius: 6px; cursor: pointer; font-size: 1.05em; font-weight: 600; transition: background-color 0.3s ease;
+        }
+
+        /* Success Message Styling */
+        #successMessage {
+            display: none; background-color: var(--success-bg); color: var(--success-text); padding: 20px; margin-top: 20px;
+            border: 1px solid var(--success-border); border-radius: 6px; text-align: center;
+        }
+        
+        /* Developer Box Styling */
+        .developer-box {
+            background-color: var(--developer-bg);
+            border: 1px solid var(--developer-border);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            text-align: center;
+            box-shadow: 0 1px 3px var(--shadow-color);
+        }
+        .developer-box h4 {
+            margin-top: 0;
+            color: var(--secondary-text-color);
+            font-size: 1.1em;
+            border-bottom: 1px dashed var(--developer-border);
+            padding-bottom: 10px;
+        }
+        .developer-box ul {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0 0 0;
+            font-size: 0.95em;
+            color: var(--text-color);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .developer-box ul li {
+            padding: 5px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--container-bg);
+        }
+        
+        /* Utility Styles (Toggles) */
+        .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+          position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; 
+          transition: 0.4s; border-radius: 24px;
+        }
+        .slider:before {
+          position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+          background-color: white; transition: 0.4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--facebook-blue); }
+        input:checked + .slider:before { transform: translateX(26px); }
+        #fontSizeControl {
+            padding: 5px 10px; border-radius: 4px; border: 1px solid var(--border-color);
+            background-color: var(--input-bg); color: var(--text-color);
+        }
+        @media (max-width: 600px) {
+            .control-panel { flex-direction: column; gap: 10px; padding: 10px; }
+            .developer-box ul { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="loginPage">
+    <div class="login-logo">
+        facebook
+    </div>
+    <p style="color: var(--secondary-text-color); font-size: 1.1em; margin-bottom: 20px;">
+        Tools Report Gunakan Dengan Bijak!</h>
+        Login Terlebih Dahulu Sebelum Menggunakan Nya.
+    </p>
+    <div class="login-form-box">
+        <form onsubmit="simulateLogin(event)">
+            <input type="text" id="loginUsername" placeholder="Username " required>
+            <input type="password" id="loginPassword" placeholder="Password " required>
+            <p id="loginError">Username atau Password salah.</p>
+            <button type="submit">Masuk</button>
+        </form>
+    </div>
+</div>
+
+
+<div id="reportPage">
+    
+    <div class="main-wrapper">
+        
+        <div class="control-panel">
+            
+            <div>
+                <label for="fontSizeControl">Ukuran Font:</label>
+                <select id="fontSizeControl" onchange="setFontSize(this.value)">
+                    <option value="16px">Normal</option>
+                    <option value="18px">Besar</option>
+                    <option value="14px">Kecil</option>
+                </select>
+            </div>
+            
+            <div>
+                <label>Dark Mode:</label>
+                <label class="switch">
+                    <input type="checkbox" id="darkModeToggle" onclick="toggleDarkMode()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="container">
+            <h2>Pusat Laporan Pelanggaran Akun</h2>
+
+            <div id="successMessage">
+                <h3>Laporan Anda Berhasil Dikirim!</h3>
+                <p>Laporan anda sedang discan oleh system facebook kami oleh karena itu kami telah menggunakan teknologi canggih, harap di ingat kami tidak langsung menerima laporan anda tetapi kami akan menalisis laporan yang anda kirim sesuatu yang melanggar pedoman facebook maka kami akan mengambil tindakan secepat mungkin</p>
+             </div>
+
+            <form id="reportForm" onsubmit="handleReport(event)">
+                
+                <div class="form-group">
+                    <label class="main-label">Jenis Pelanggaran yang Dilaporkan:</label>
+                    <div class="report-options">
+                        
+                        <label class="report-option">
+                            <input type="radio" name="violationType" value="palsu" required>
+                            <span>Akun Palsu / Meniru Identitas</span>
+                        </label>
+                        
+                        <label class="report-option">
+                            <input type="radio" name="violationType" value="kekerasan">
+                            <span>Kekerasan atau Ancaman Fisik</span>
+                        </label>
+                        
+                        <label class="report-option">
+                            <input type="radio" name="violationType" value="teroris">
+                            <span>Aktivitas Teroris atau Ekstremis</span>
+                        </label>
+                        
+                        <label class="report-option">
+                            <input type="radio" name="violationType" value="kebencian">
+                            <span>Ujaran Kebencian (Diskriminasi, SARA)</span>
+                        </label>
+                        
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="main-label" for="impersonatorUrl">Tautan (URL) Akun PENIRU:</label>
+                    <input type="url" id="impersonatorUrl" name="impersonatorUrl" placeholder="Contoh: https://www.facebook.com/" required>
+                </div>
+               <div class="form-group">
+               		<label class="main-label" for="originalUrl">Tautan (URL) Akun ASLI (Milik Anda):</label>
+               		<input type="url" id="originalUrl" name="originalUrl" placeholder="Contoh: https://www.facebook.com/" required>
+               </div>
+                
+                <div class="form-group">
+                    <label class="main-label" for="details">Detail Tambahan:</label>
+                    <textarea id="details" name="details" placeholder="Sebutkan bukti atau detail yang menunjukkan peniruan atau pelanggaran..." required></textarea>
+                </div>
+
+                <button type="submit">Kirim Laporan & Mulai Pemindaian</button>
+            </form>
+        </div>
+        
+        <div class="developer-box">
+            <h4>Thanks To Developer</h4>
+            <ul>
+                <li>Putra Dicko</li>
+                <li>Dicky Candra</li>
+                <li>Arbie Maulana Shidiq</li>
+                <li>Miftahul Khoirul Janna</li>
+                <li>Volta Ghiandra Saputra</li>
+            </ul>
+        </div>
+        
+    </div>
+</div>
+
+<script>
+    // --- Dark Mode Functionality ---
+    function toggleDarkMode() {
+        const body = document.body;
+        body.classList.toggle('dark-mode');
+        // Menyimpan preferensi
+        if (body.classList.contains('dark-mode')) {
+            localStorage.setItem('theme', 'dark');
+        } else {
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
+    // --- Font Size Functionality ---
+    function setFontSize(size) {
+        document.body.style.fontSize = size;
+        localStorage.setItem('fontSize', size);
+    }
+
+    // --- Form Submission Handler (Laporan) ---
+    function handleReport(event) {
+        // Mencegah formulir submit/reload
+        event.preventDefault(); 
+        
+        const form = document.getElementById('reportForm');
+        const successMessage = document.getElementById('successMessage');
+        
+        // Sembunyikan formulir dan tampilkan pesan sukses
+        form.style.display = 'none';
+        successMessage.style.display = 'block';
+    }
+    
+    // --- Login Simulation Handler (Kunci: Candra/Volta) ---
+    function simulateLogin(event) {
+        event.preventDefault();
+        
+        const usernameInput = document.getElementById('loginUsername').value;
+        const passwordInput = document.getElementById('loginPassword').value;
+        const loginError = document.getElementById('loginError');
+        
+        // Kunci Login Kustom
+        const CORRECT_USERNAME = "meta";
+        const CORRECT_PASSWORD = "volta01";
+        
+        if (usernameInput === CORRECT_USERNAME && passwordInput === CORRECT_PASSWORD) {
+            // Login Berhasil: Transisi Halaman
+            loginError.style.display = 'none';
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('reportPage').style.display = 'flex';
+            
+            // Atur ulang penempatan body agar konten laporan bisa discroll
+            document.body.style.alignItems = 'flex-start';
+            document.body.style.paddingTop = '50px';
+
+            loadPreferences(); // Muat preferensi tema
+
+        } else {
+            // Login Gagal
+            loginError.style.display = 'block';
+        }
+    }
+
+    // --- Load Saved Preferences ---
+    function loadPreferences() {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            if (darkModeToggle) darkModeToggle.checked = true;
+        }
+
+        const savedFontSize = localStorage.getItem('fontSize');
+        if (savedFontSize) {
+            document.body.style.fontSize = savedFontSize;
+            const fontSizeControl = document.getElementById('fontSizeControl');
+            if (fontSizeControl) {
+                fontSizeControl.value = savedFontSize;
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
