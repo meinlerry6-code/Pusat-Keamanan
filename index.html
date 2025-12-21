@@ -3,403 +3,370 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tools Account Report</title>
-    <!-- Tailwind CSS (Framework Desain Modern) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome (Ikon) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>Facebook - Pusat Laporan Keamanan (Dark Mode)</title>
     <style>
-        /* --- CONFIGURASI TAMPILAN FACEBOOK DARK MODE PERMANEN --- */
+        /* Variabel Warna Mode Gelap Permanen */
         :root {
-            --bg-body: #18191a;
-            --bg-card: #242526;
-            --bg-input: #3a3b3c;
-            --text-primary: #e4e6eb;
-            --text-secondary: #b0b3b8;
-            --accent-blue: #2d88ff;
-            --border-color: #3e4042;
+            --fb-blue: #242526;
+            --fb-header: #242526;
+            --fb-bg: #18191a;
+            --fb-card: #242526;
+            --fb-text: #e4e6eb;
+            --fb-text-sub: #b0b3b8;
+            --fb-input: #3a3b3c;
+            --fb-blue-btn: #2374e1;
+            --success: #45bd62;
+            --border: #3e4042;
         }
 
         body {
-            background-color: var(--bg-body);
-            color: var(--text-primary);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            overflow-x: hidden;
+            background-color: var(--fb-bg);
+            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--fb-text);
+            transition: font-size 0.2s;
         }
 
-        /* Card Styling */
-        .glass-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
+        /* Header Gaya Modern Dark */
+        .header {
+            background-color: var(--fb-header);
+            padding: 10px 20px;
+            color: #fff;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: -1px;
+            color: #2374e1; 
+        }
+
+        /* Pengaturan Font UI */
+        .font-settings {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .font-settings select {
+            background: var(--fb-input);
+            color: white;
+            border: 1px solid var(--border);
+            padding: 5px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .main-content {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 15px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content { grid-template-columns: 1fr; }
+        }
+
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: var(--fb-card);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--fb-blue-btn);
+            display: block;
+        }
+        .stat-label { font-size: 11px; color: var(--fb-text-sub); }
+
+        /* Card Form */
+        .card {
+            background: var(--fb-card);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .blue-bar {
+            background-color: rgba(35, 116, 225, 0.1);
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            color: #4599ff;
+            margin-bottom: 15px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background-color: var(--fb-input);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+            color: white;
+        }
+
+        .btn-submit {
+            background-color: var(--fb-blue-btn);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* Live Feed */
+        .live-feed {
+            background: var(--fb-card);
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid var(--border);
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: hidden;
+        }
+        .feed-item {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            animation: fadeIn 0.5s ease-in;
+        }
+        .status-badge {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            background: #3e4042;
+            color: #b0b3b8;
+        }
+        .status-online {
+            background: #31a24c;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Success UI */
+        #success-ui {
+            display: none;
+            text-align: center;
+        }
+        .ticket-box {
+            background: #1c1e21;
+            padding: 15px;
+            border: 2px dashed var(--fb-blue-btn);
+            margin: 15px 0;
+            font-family: monospace;
+            font-weight: bold;
+            color: var(--success);
+            word-break: break-all;
+        }
+
+        /* Kotak Developer */
+        .dev-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 15px;
+        }
+        .dev-card {
+            background: var(--fb-card);
+            border: 1px solid var(--border);
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+        .dev-card h4 {
+            margin: 0 0 15px 0;
+            color: var(--fb-blue-btn);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 14px;
+        }
+        .dev-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .dev-item {
+            background: var(--fb-input);
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--fb-text);
         }
 
-        /* Inputs */
-        .fb-input {
-            background-color: var(--bg-input);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            transition: all 0.2s ease;
-        }
-        .fb-input:focus {
-            border-color: var(--accent-blue);
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(45, 136, 255, 0.2);
-        }
-
-        /* Animasi Angka Live */
-        .live-dot {
-            height: 10px;
-            width: 10px;
-            background-color: #31a24c;
-            border-radius: 50%;
-            display: inline-block;
-            box-shadow: 0 0 0 0 rgba(49, 162, 76, 0.7);
-            animation: pulse-green 2s infinite;
-        }
-
-        @keyframes pulse-green {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(49, 162, 76, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(49, 162, 76, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(49, 162, 76, 0); }
-        }
-
-        /* Scrollbar Halus */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-body); }
-        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #4e4f50; }
-
-        /* Developer Box Styling yang Rapih */
-        .dev-box {
-            background: linear-gradient(145deg, #2a2b2c, #1f2021);
-            border-left: 4px solid var(--accent-blue);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center py-8 px-4">
+<body id="main-body">
 
-    <!-- KONTEN UTAMA -->
-    <main class="pt-24 pb-10 px-4 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
-    
-        <!-- KOLOM KIRI (2/3): FORMULIR & DEVELOPER -->
-        <div class="lg:col-span-2 space-y-6">
-            
-            <!-- Info Waktu -->
-            <div class="bg-fb-cardDark p-4 rounded-xl shadow border border-gray-700 flex justify-between items-center">
-                <div>
-                    <h2 class="font-extrabold text-xl text-fb-blue">Formulir Laporan Akun</h2>
-                    <p class="text-sm text-gray-400">Pastikan laporan sesuai Standar Komunitas Meta.</p>
-                </div>
-                <div class="text-right">
-                    <div id="liveDate" class="text-base font-semibold text-gray-300">...</div>
-                    <div id="liveTime" class="text-sm text-gray-500 font-mono">...</div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- KONTEN UTAMA -->
-    <main class="w-full max-w-3xl space-y-6">
-
-        <!-- STATISTIK LIVE (Tengah) -->
-        <section class="glass-card p-6 relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-green-500 to-blue-500"></div>
-            
-            <h2 class="text-center text-lg font-semibold mb-6 flex items-center justify-center gap-2">
-                <span class="live-dot"></span> Statistik Live Enforcement
-            </h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                <!-- Total Bulan Ini -->
-                <div class="bg-[#18191a] p-4 rounded-xl border border-[#3e4042]">
-                    <div class="text-xs text-gray-400 uppercase font-bold mb-1">Total Laporan Bulan Ini</div>
-                    <div id="stat-month" class="text-2xl font-bold text-white">0</div>
-                    <div class="text-xs text-green-500 mt-1 flex justify-center items-center gap-1">
-                        <i class="fas fa-chart-line"></i> Meningkat
-                    </div>
-                </div>
-
-                <!-- Menunggu Peninjauan (983.456) -->
-                <div class="bg-[#18191a] p-4 rounded-xl border border-[#3e4042] relative">
-                    <div class="text-xs text-yellow-500 uppercase font-bold mb-1">Menunggu Peninjauan</div>
-                    <div id="stat-pending" class="text-3xl font-extrabold text-white tracking-wide">983.456</div>
-                    <div class="text-xs text-gray-500 mt-1">Antrian Global</div>
-                </div>
-
-                <!-- Akun Ditindak (Bertambah Terus) -->
-                <div class="bg-[#18191a] p-4 rounded-xl border border-[#3e4042]">
-                    <div class="text-xs text-red-400 uppercase font-bold mb-1">Akun Diblokir / Ditindak</div>
-                    <div id="stat-banned" class="text-2xl font-bold text-white">0</div>
-                    <div class="text-xs text-red-500 mt-1 animate-pulse">
-                        <i class="fas fa-bolt"></i> Live Action
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FORMULIR LAPORAN -->
-        <section class="glass-card p-6 sm:p-8">
-            <div class="flex items-center justify-between mb-6 border-b border-[#3e4042] pb-4">
-                <h3 class="text-xl font-bold flex items-center gap-2">
-                    <i class="fas fa-shield-halved text-blue-500"></i> Form Laporan Pelanggaran
-                </h3>
-                <span class="bg-blue-500/20 text-blue-400 text-xs px-2 py-1 rounded border border-blue-500/30">Secure</span>
-            </div>
-
-            <form id="reportForm" onsubmit="handleReport(event)" class="space-y-5">
-                
-                <!-- URL Target -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-300 mb-2">URL Profil / Target (Meniru Anda)</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-link text-gray-500"></i>
-                        </div>
-                        <input type="url" required placeholder="https://facebook.com/" 
-                            class="fb-input w-full pl-10 pr-4 py-3 rounded-lg text-sm">
-                    </div>
-                </div>
-
-                <!-- Jenis Pelanggaran -->
-                <div>
-                   <div class="mb-8">
-                   <label class="block text-sm font-bold mb-3 text-gray-300">Jenis Pelanggaran</label>
-                   <div class="grid grid-cols-1 gap-3">
-                   
-                   	<label class="cursor-pointer group">
-                   		<input type="radio" name="reason" value="Kekerasan" class="peer sr-only" required>
-                   		<div class="p-4 rounded-xl border border-gray-600 transition hover:bg-[#303031] flex items-center gap-4">
-                   		<div class="w-10 h-10 rounded-full bg-red-900/30 flex items-center justify-center text-red-500">
-                   		<i class="fas fa-fist-raised text-lg"></i>
-                   </div>
-                   <div>
-                   		<span class="font-bold text-gray-200 group-hover:text-white">Kekerasan & Ancaman Fisik</span>
-                   		<p class="text-xs text-gray-500 mt-0.5">Konten kekerasan grafis atau ancaman nyata.</p>
-                   	  </div>
-                   </div>
-                 </label>
-                   
-                   		<label class="cursor-pointer group">
-                   		<input type="radio" name="reason" value="Teroris" class="peer sr-only">
-                   		<div class="p-4 rounded-xl border border-gray-600 transition hover:bg-[#303031] flex items-center gap-4">
-                   		<div class="w-10 h-10 rounded-full bg-orange-900/30 flex items-center justify-center text-orange-500">
-                   		<i class="fas fa-bomb text-lg"></i>
-                   </div>
-                   <div>
-                   		<span class="font-bold text-gray-200 group-hover:text-white">Terorisme & Organisasi Berbahaya</span>
-                   		<p class="text-xs text-gray-500 mt-0.5">Propaganda atau dukungan terhadap terorisme.</p>
-                     </div>
-                   </div>
-                 </label>
-                   
-                   		<label class="cursor-pointer group">
-                   		<input type="radio" name="reason" value="Hate Speech" class="peer sr-only">
-                   		<div class="p-4 rounded-xl border border-gray-600 transition hover:bg-[#303031] flex items-center gap-4">
-                   		<div class="w-10 h-10 rounded-full bg-purple-900/30 flex items-center justify-center text-purple-500">
-                   		<i class="fas fa-skull-crossbones text-lg"></i>
-                   </div>
-                  <div>
-                   		<span class="font-bold text-gray-200 group-hover:text-white">Ujaran Kebencian (Hate Speech)</span>
-                   		<p class="text-xs text-gray-500 mt-0.5">Serangan ras, agama, atau etnis.</p>
-                       </div>
-                    </div>
-                </div>
-
-                <!-- Tombol Submit -->
-                <button type="submit" id="btnSubmit" 
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-lg">
-                    <span>Kirim Laporan ke Facebook</span>
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </form>
-            
-            <!-- KOTAK DEVELOPER -->
-            <div class="bg-gray-800 rounded-xl shadow-2xl p-6 relative overflow-hidden border border-gray-700">
-                <div class="absolute top-0 right-0 p-4 opacity-5">
-                    <i class="fas fa-code text-9xl text-white"></i>
-                </div>
-                <h3 class="text-xs font-black uppercase tracking-[0.2em] text-fb-blue mb-5 border-b border-gray-700 pb-3 relative z-10">
-                    Development Team
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 relative z-10">
-                    <div class="flex items-center gap-3 p-2 bg-white/5 rounded-lg border border-white/5 hover:bg-white/10 transition">
-                        <div class="w-8 h-8 rounded bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-xs font-bold text-white">DC</div>
-                        <span class="font-bold text-sm text-gray-200">Dicky Candra</span>
-                    </div>
-                    <div class="flex items-center gap-3 p-2 bg-white/5 rounded-lg border border-white/5 hover:bg-white/10 transition">
-                        <div class="w-8 h-8 rounded bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center text-xs font-bold text-white">PD</div>
-                        <span class="font-bold text-sm text-gray-200">Putra Dicko</span>
-                    </div>
-                    <div class="flex items-center gap-3 p-2 bg-white/5 rounded-lg border border-white/5 hover:bg-white/10 transition">
-                        <div class="w-8 h-8 rounded bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center text-xs font-bold text-white">VG</div>
-                        <span class="font-bold text-sm text-gray-200">Volta Ghiandra S.</span>
-                    </div>
-                    <div class="flex items-center gap-3 p-2 bg-white/5 rounded-lg border border-white/5 hover:bg-white/10 transition">
-                        <div class="w-8 h-8 rounded bg-gradient-to-br from-pink-500 to-pink-700 flex items-center justify-center text-xs font-bold text-white">MK</div>
-                        <span class="font-bold text-sm text-gray-200">Miftahul Khoirul J.</span>
-                    </div>
-                    <div class="flex items-center gap-3 p-2 bg-white/5 rounded-lg border border-white/5 hover:bg-white/10 transition lg:col-span-2">
-                        <div class="w-8 h-8 rounded bg-gradient-to-br from-yellow-500 to-yellow-700 flex items-center justify-center text-xs font-bold text-white">AM</div>
-                        <span class="font-bold text-sm text-gray-200">Arbie Maulana Shidiq</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- MODAL SUKSES -->
-    <div id="successModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-[#242526] border border-[#3e4042] p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center transform scale-90 transition-transform duration-300" id="modalContent">
-            <div class="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-5 border border-green-500/50">
-                <i class="fas fa-check text-4xl text-green-500"></i>
-            </div>
-            <h2 class="text-2xl font-bold text-white mb-2">Laporan Terkirim</h2>
-            <p class="text-gray-300 mb-6">Sukses, tinjauan Anda telah kami terima dan sedang diproses oleh sistem keamanan kami.</p>
-            <div class="bg-[#18191a] p-3 rounded-lg mb-6 border border-[#3e4042]">
-                <p class="text-xs text-gray-500">ID Laporan:</p>
-                <p class="text-sm font-mono text-blue-400 font-bold">#FB-SEC-<span id="reportId"></span></p>
-            </div>
-            <button onclick="closeModal()" class="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 rounded-xl transition-colors">
-                Tutup Dashboard
-            </button>
+    <div class="header">
+        <span class="header-title">facebook</span>
+        <div class="font-settings">
+            <select id="fontFamily" onchange="changeFontFamily()">
+                <option value="Segoe UI">Default Font</option>
+                <option value="Tahoma">Tahoma</option>
+                <option value="Courier New">Monospace</option>
+                <option value="Georgia">Serif</option>
+            </select>
+            <select id="fontSize" onchange="changeFontSize()">
+                <option value="14px">Kecil</option>
+                <option value="16px" selected>Sedang</option>
+                <option value="20px">Besar</option>
+            </select>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <div class="main-content">
+        <div class="left-col">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value" id="count-report">1,248,200</span>
+                    <span class="stat-label">Laporan Diterima</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="count-action">982,100</span>
+                    <span class="stat-label">Telah Ditindak</span>
+                </div>
+            </div>
+
+            <div class="card" id="form-container">
+                <div class="blue-bar">Tools Report Account Facebook</div>
+                <p style="font-size: 0.9em; color: var(--fb-text-sub);">Laporan anda terenkripsi secara end-to-end, tidak seorang pun yang bisa melihat isi dalam server meta, terkecuali facebook meta, bisa melihat nya.</p>
+                
+                <form id="reportForm">
+                    <label style="font-weight: bold;">Tautan Target:</label>
+                    <input type="text" id="target_url" placeholder="URL Profil Facebook" required>
+                    
+                    <label style="font-weight: bold;">Alasan Pelaporan:</label>
+                    <textarea id="desc" rows="3" placeholder="Jelaskan alasan secara detail..." required></textarea>
+                    
+                    <button type="submit" class="btn-submit">Kirim Ke Meta</button>
+                </form>
+            </div>
+
+            <div class="card" id="success-ui">
+                <div style="font-size: 50px; color: var(--success);">✓</div>
+                <h2 style="margin: 10px 0;">Laporan Terkirim</h2>
+                <div class="ticket-box" id="ticket-id">FB-ID-00000000</div>
+                <p style="font-size: 0.85em; color: var(--fb-text-sub); line-height: 1.6; padding: 0 10px;">
+                    Kami Akan Meninjau Laporan Anda Harap Di Ingat Kami Telah Menggunakan Teknologi Canggih Laporan Anda Akan Diteruskan Oleh Tim Peninjau Kami Tetapi Kami Tidak Menghapus Secara Langsung Ini Sama Hal Seperti Yang Ada Di Facebook
+                </p>
+                <button onclick="backToHome()" class="btn-submit" style="background: #3a3b3c; margin-top: 15px;">Kembali</button>
+            </div>
+        </div>
+
+        <div class="right-col">
+            <h3 style="font-size: 14px; color: var(--fb-text-sub); margin-top: 0;">AKTIVITAS GLOBAL</h3>
+            <div class="live-feed" id="live-log">
+                <div class="feed-item">
+                    <b>Sistem Aktif</b> <span class="status-badge status-online">Online</span><br>
+                    <small>Menunggu laporan baru...</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dev-container">
+        <div class="dev-card">
+            <h4>Development Team</h4>
+            <div class="dev-list">
+                <div class="dev-item">Dicky Candra</div>
+                <div class="dev-item">Putra Dicko</div>
+                <div class="dev-item">Volta Ghiandra Saputra</div>
+                <div class="dev-item">Miftahul Khoirul Jannah</div>
+                <div class="dev-item">Arbie Maulana Shidiq</div>
+            </div>
+        </div>
+        <p style="text-align: center; color: var(--fb-text-sub); font-size: 11px; margin-top: 15px;">
+            © 2025 Facebook Safety Center Dashboard · Secure Environment
+        </p>
+    </div>
+
     <script>
-        // --- 1. KONFIGURASI PENGGUNA (Bisa Diatur Sendiri) ---
-        const CONFIG = {
-            startPending: 999.8285,    // Mulai dari angka ini
-            startBanned: 999.8285,      // Mulai dari angka ini
-            startMonth: 999.8285,       // Mulai dari angka ini
-            autoIncrementSpeed: 1500 // Kecepatan tambah angka (ms)
-        };
-
-        // --- WAKTU AKURAT ---
-        function updateTime() {
-        	const now = new Date();
-        	const dateStr = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        	const timeStr = now.toLocaleTimeString('id-ID', { hour12: false }); // 24 jam
-        
-        document.getElementById('liveDate').innerText = dateStr;
-        document.getElementById('liveTime').innerText = timeStr;
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
-
-        // --- 3. SISTEM ANGKA PERSISTEN (SIMPAN DI STORAGE) ---
-        function getNumber(key, startVal) {
-            let saved = localStorage.getItem(key);
-            if (!saved) {
-                return startVal;
-            }
-            return parseInt(saved);
+        // Fungsi Navigasi Kembali Tanpa Reload
+        function backToHome() {
+            // Sembunyikan pesan sukses, tampilkan form
+            document.getElementById('success-ui').style.display = 'none';
+            document.getElementById('form-container').style.display = 'block';
+            // Reset input form
+            document.getElementById('reportForm').reset();
         }
 
-        function saveNumber(key, val) {
-            localStorage.setItem(key, val);
+        function changeFontSize() {
+            const size = document.getElementById('fontSize').value;
+            document.getElementById('main-body').style.fontSize = size;
         }
 
-        // Load data awal
-        let pending = getNumber('fb_pending_v2', CONFIG.startPending);
-        let banned = getNumber('fb_banned_v2', CONFIG.startBanned);
-        let month = getNumber('fb_month_v2', CONFIG.startMonth);
-
-        // Format angka (misal 1000 jadi 1.000)
-        const fmt = (num) => new Intl.NumberFormat('id-ID').format(num);
-
-        function updateDisplay() {
-            document.getElementById('stat-pending').innerText = fmt(pending);
-            document.getElementById('stat-banned').innerText = fmt(banned);
-            document.getElementById('stat-month').innerText = fmt(month);
+        function changeFontFamily() {
+            const family = document.getElementById('fontFamily').value;
+            document.getElementById('main-body').style.fontFamily = family;
         }
-        
-        // Panggil saat load pertama
-        updateDisplay();
 
-        // --- 4. SIMULASI ANGKA BERTAMBAH OTOMATIS (LIVE) ---
+        // Statistik Real-time dengan pertumbuhan yang lebih halus
+        let reportCount = 1248200;
+        let actionCount = 982100;
+
         setInterval(() => {
-            // Logika acak agar terlihat real
-            // Pending: Naik kadang turun dikit (simulasi diproses)
-            let changePending = Math.floor(Math.random() * 5); 
-            pending += changePending;
+            reportCount += Math.floor(Math.random() * 9999999999999999) + 99999999999;
+            actionCount += Math.floor(Math.random() * 9999999999999999) + 999999999999;
+            document.getElementById('count-report').innerText = reportCount.toLocaleString();
+            document.getElementById('count-action').innerText = actionCount.toLocaleString();
+        }, 2000);
 
-            // Banned: Selalu naik
-            let changeBanned = Math.floor(Math.random() * 1) + 999.8285;
-            banned += changeBanned;
+        // Feed Live Aktivitas
+        const logContainer = document.getElementById('live-log');
+        const actions = ["Akun Ditangguhkan", "URL Diblokir", "Mass Report Diproses", "Konten Disembunyikan"];
 
-            // Month: Selalu naik
-            let changeMonth = Math.floor(Math.random() * 8) + 999.8285;
-            month += changeMonth;
+        setInterval(() => {
+            const newID = 'FB-' + Math.floor(Math.random() * 900000 + 100000);
+            const randomAction = actions[Math.floor(Math.random() * actions.length)];
+            const item = document.createElement('div');
+            item.className = 'feed-item';
+            item.innerHTML = `<b>${newID}</b> <span class="status-badge" style="color:#4599ff">Sukses</span><br><small>${randomAction}</small>`;
+            
+            logContainer.insertBefore(item, logContainer.firstChild);
+            if(logContainer.children.length > 8) logContainer.lastChild.remove();
+        }, 3000);
 
-            // Simpan ke storage
-            saveNumber('fb_pending_v2', pending);
-            saveNumber('fb_banned_v2', banned);
-            saveNumber('fb_month_v2', month);
-
-            updateDisplay();
-        }, CONFIG.autoIncrementSpeed);
-
-        // --- 5. LOGIKA FORMULIR & MODAL ---
-        function handleReport(e) {
+        // Form Submit Handler
+        document.getElementById('reportForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const btn = document.getElementById('btnSubmit');
-            const originalText = btn.innerHTML;
-
-            // Loading state
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses Tinjauan...';
-            btn.disabled = true;
-            btn.classList.add('opacity-70');
-
-            setTimeout(() => {
-                // Tambah angka signifikan saat user melapor
-                pending += 1;
-                banned += Math.floor(Math.random() * 10) + 5; // Efek "Langsung ditindak"
-                month += 1;
-
-                saveNumber('fb_pending_v2', pending);
-                saveNumber('fb_banned_v2', banned);
-                saveNumber('fb_month_v2', month);
-                updateDisplay();
-
-                // Generate ID Acak
-                document.getElementById('reportId').innerText = Math.floor(Math.random() * 900000) + 100000;
-
-                // Tampilkan Modal
-                const modal = document.getElementById('successModal');
-                const content = document.getElementById('modalContent');
-                modal.classList.remove('hidden');
-                // Trigger reflow
-                void modal.offsetWidth; 
-                modal.classList.remove('opacity-0');
-                content.classList.remove('scale-90');
-                content.classList.add('scale-100');
-
-                // Reset Form
-                document.getElementById('reportForm').reset();
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                btn.classList.remove('opacity-70');
-
-            }, 2000); // Delay 2 detik
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('successModal');
-            const content = document.getElementById('modalContent');
-            
-            modal.classList.add('opacity-0');
-            content.classList.remove('scale-100');
-            content.classList.add('scale-90');
-            
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
-        }
+            const ticketDisplay = document.getElementById('ticket-id');
+            // Menghasilkan ID Tiket
+            ticketDisplay.innerText = 'FB-ID-' + Math.floor(Math.random() * 100000000 + 88888888);
+            // Animasi transisi
+            document.getElementById('form-container').style.display = 'none';
+            document.getElementById('success-ui').style.display = 'block';
+        });
     </script>
 </body>
-  </html>
+</html>
